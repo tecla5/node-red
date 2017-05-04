@@ -1,0 +1,91 @@
+<!--
+  Copyright Tecla5 and other contributors, http://tecla5.com
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<!-- First, the content of the edit dialog is defined.                       -->
+
+<script type="text/x-red" data-template-name="sub-match">
+    <div class="form-row">
+        <label for="node-input-kibana"><i class="fa fa-cog"></i> <span data-i18n="infra.label.kibana"></span> <span data-i18n="common.label.port"></span></label>
+        <input type="text" id="node-input-kibana" placeholder="5601">
+    </div>
+
+    <br/>
+    <div class="form-row">
+        <label for="node-input-elasticsearch"><i class="fa fa-cog"></i> <span data-i18n="infra.label.elasticsearch"></span> <span data-i18n="common.label.port"></span></label>
+        <input type="text" id="node-input-elasticsearch" placeholder="9200">
+    </div>
+
+    <br/>
+    <div class="form-row">
+        <label for="node-input-logstash"><i class="fa fa-cog"></i> <span data-i18n="infra.label.logstash"></span> <span data-i18n="common.label.port"></span></label>
+        <input type="text" id="node-input-logstash" placeholder="5044">
+    </div>
+
+    <br/>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="common.label.name"></span></label>
+        <input type="text" id="node-input-name" data-i18n="[placeholder]common.label.name">
+    </div>
+</script>
+
+
+<!-- Next, some simple help text is provided for the node.                   -->
+<script type="text/x-red" data-help-name="sub-match">
+    <p>The ELK image can be used to configure an ELK stack, ie. Elasticsearch, Logstash and Kibana</p>
+    <p>The node allows configuration of the interface ports:</p>
+    <ul>
+        <li>5601 (Kibana web interface)</li>
+        <li>9200 (Elasticsearch JSON interface)</li>
+        <li>5044 (Logstash Beats interface)</li>
+    </ul>
+    </p>
+</script>
+
+<!-- Finally, the node type is registered along with all of its properties   -->
+<!-- The example below shows a small subset of the properties that can be set-->
+<script type="text/javascript">
+    RED.nodes.registerType('elk', {
+        category: 'advanced', // the palette category
+        color: '#9999ff',
+        defaults: { // defines the editable properties of the node
+            name: {
+                value: "elk"
+            }, //  along with default values.
+            kibana: {
+                value: "5601",
+                required: false
+            },
+            elasticsearch: {
+                value: "9200",
+                required: false
+            },
+            logstash: {
+                value: "5044",
+                required: false
+            }
+        },
+        inputs: 0, // set the number of inputs - only 0 or 1
+        outputs: 0, // set the number of outputs - 0 to n
+        // set the icon (held in icons dir below where you save the node)
+        icon: "cog.png", // saved in  icons/myicon.png
+        label: function () { // sets the default label contents
+            return this.name || this.topic || "sample";
+        },
+        labelStyle: function () { // sets the class to apply to the label
+            return this.name ? "node_label_italic" : "";
+        }
+    })
+</script>
