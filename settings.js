@@ -16,9 +16,10 @@
 
 // The `https` setting requires the `fs` module. Uncomment the following
 // to make it available:
-//var fs = require("fs");
+var fs = require("fs");
 
 module.exports = {
+    fs: fs,
     // the tcp port that the Node-RED web server is listening on
     uiPort: process.env.PORT || 1880,
 
@@ -175,7 +176,8 @@ module.exports = {
     //    context.global.os
 
     functionGlobalContext: {
-        // os:require('os'),
+        fs: fs,
+        os: require('os')
         // octalbonescript:require('octalbonescript'),
         // jfive:require("johnny-five"),
         // j5board:require("johnny-five").Board({repl:false})

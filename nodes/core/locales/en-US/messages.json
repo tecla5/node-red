@@ -129,12 +129,12 @@
             "cert": "Certificate",
             "key": "Private Key",
             "ca": "CA Certificate",
-            "verify-server-cert":"Verify server certificate"
+            "verify-server-cert": "Verify server certificate"
         },
         "placeholder": {
-            "cert":"path to certificate (PEM format)",
-            "key":"path to private key (PEM format)",
-            "ca":"path to CA certificate (PEM format)"
+            "cert": "path to certificate (PEM format)",
+            "key": "path to private key (PEM format)",
+            "ca": "path to CA certificate (PEM format)"
         },
         "error": {
             "missing-file": "No certificate/key file provided"
@@ -158,9 +158,20 @@
             "outputs": "Outputs"
         },
         "error": {
-            "inputListener":"Cannot add listener to 'input' event within Function"
+            "inputListener": "Cannot add listener to 'input' event within Function"
         },
         "tip": "See the Info tab for help writing functions."
+    },
+    "service": {
+        "label": {
+            "pattern": "Service",
+            "maxMessages": "Max messages",
+            "outputs": "Outputs"
+        },
+        "error": {
+            "inputListener": "Cannot add listener to 'input' event within Service"
+        },
+        "tip": "See the Info tab for help writing services."
     },
     "template": {
         "label": {
@@ -200,21 +211,21 @@
             "random": "random",
             "queue": "queue",
             "timed": "releases per",
-            "units" : {
+            "units": {
                 "second": {
-                    "plural" : "Seconds",
+                    "plural": "Seconds",
                     "singular": "Second"
                 },
                 "minute": {
-                    "plural" : "Minutes",
+                    "plural": "Minutes",
                     "singular": "Minute"
                 },
                 "hour": {
-                    "plural" : "Hours",
+                    "plural": "Hours",
                     "singular": "Hour"
                 },
                 "day": {
-                    "plural" : "Days",
+                    "plural": "Days",
                     "singular": "Day"
                 }
             }
@@ -249,8 +260,8 @@
             "trigger": "trigger",
             "trigger-block": "trigger & block",
             "reset": "Reset the trigger if:",
-            "resetMessage":"msg.reset is set",
-            "resetPayload":"msg.payload equals",
+            "resetMessage": "msg.reset is set",
+            "resetPayload": "msg.payload equals",
             "resetprompt": "optional"
         }
     },
@@ -276,8 +287,8 @@
             "keepalive": "Keep alive time (s)",
             "cleansession": "Use clean session",
             "use-tls": "Enable secure (SSL/TLS) connection",
-            "tls-config":"TLS Configuration",
-            "verify-server-cert":"Verify server certificate",
+            "tls-config": "TLS Configuration",
+            "verify-server-cert": "Verify server certificate",
             "compatmode": "Use legacy MQTT 3.1 support"
         },
         "tabs-label": {
@@ -288,7 +299,7 @@
         },
         "placeholder": {
             "clientid": "Leave blank for auto generated",
-            "clientid-nonclean":"Must be set for non-clean sessions",
+            "clientid-nonclean": "Must be set for non-clean sessions",
             "will-topic": "Leave blank to disable will message",
             "birth-topic": "Leave blank to disable birth message"
         },
@@ -318,7 +329,7 @@
         "setby": "- set by msg.method -",
         "basicauth": "Use basic authentication",
         "use-tls": "Enable secure (SSL/TLS) connection",
-        "tls-config":"TLS Configuration",
+        "tls-config": "TLS Configuration",
         "utf8": "a UTF-8 string",
         "binary": "a binary buffer",
         "json": "a parsed JSON object",
@@ -334,7 +345,7 @@
             "no-response": "No response object",
             "json-error": "JSON parse error",
             "no-url": "No url specified",
-            "deprecated-call":"Deprecated call to __method__"
+            "deprecated-call": "Deprecated call to __method__"
         },
         "status": {
             "requesting": "requesting"
@@ -494,14 +505,14 @@
         "stopfirst": "stopping after first match",
         "ignorecase": "ignore case",
         "rules": {
-            "btwn":"is between",
-            "cont":"contains",
-            "regex":"matches regex",
-            "true":"is true",
-            "false":"is false",
-            "null":"is null",
-            "nnull":"is not null",
-            "else":"otherwise"
+            "btwn": "is between",
+            "cont": "contains",
+            "regex": "matches regex",
+            "true": "is true",
+            "false": "is false",
+            "null": "is null",
+            "nnull": "is not null",
+            "else": "otherwise"
         },
         "errors": {
             "invalid-expr": "Invalid expression: __error__"
