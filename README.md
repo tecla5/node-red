@@ -25,9 +25,24 @@ More documentation can be found [here](http://nodered.org/docs).
 For further help, or general discussion, please use the
 [mailing list](https://groups.google.com/forum/#!forum/node-red).
 
+## Changes
+
+Adding service nodes:
+- `pattern-match` to pattern match on NATS messages
+
+Hermera will act on a message by sending it to the next node(s) with a `cb` and `resp`.
+You should link a `pattern-match` node to a `function` node which uses the cb to publish the result back to NATS.
+
 ## Developers
 
 If you want to run the latest code from git, here's how to get started:
+
+Start Aither or NATS
+
+```
+git clone https://github.com/hemerajs/aither.git
+docker-compose up
+```
 
 1. Clone the code:
 

@@ -24,12 +24,26 @@ module.exports = function (RED) {
     // require any external libraries we may need....
     //var foo = require("foo-library");
     const Hemera = require('nats-hemera')
-    const nats = require('nats').connect(RED.settings.nats)
+    const config = RED.settings.nats || {
+        'url': process.env.NATS_URL,
+        'user': process.env.NATS_USER,
+        'pass': process.env.NATS_PW
+    }
+    console.log('nats config', config)
+    const nats = require('nats').connect(config)
+    const logLevel = RED.settings.logLevel || 'info'
     const hemera = new Hemera(nats, {
-        logLevel: RED.settings.logLevel || 'info'
+        logLevel
     })
     const joi = require('hemera-joi')
     hemera.use(joi)
+
+    function resolvePattern({
+        pattern,
+        validations
+    }) {
+        return pattern
+    }
 
     // The main node definition - most things happen in here
     function PatternMatchNode(n) {
@@ -50,17 +64,22 @@ module.exports = function (RED) {
         // Look at other real nodes for some better ideas of what to do....
         var msg = {};
         msg.topic = this.topic;
-        msg.payload = n.payload || "hello"
 
         hemera.ready(() => {
             // Use Joi as payload validator
             hemera.setOption('payloadValidator', 'hemera-joi')
+            let pattern = resolvePattern({
+                pattern: node.pattern,
+                validations: node.validations
+            })
 
             let Joi = hemera.exposition['hemera-joi'].joi
-            hemera.act(node.pattern,
-                (err, resp) => {
-                    msg.err = err
-                    msg.resp = resp
+            hemera.act(pattern,
+                (req, cb) => {
+                    msg.req = req
+                    msg.cb = cb
+                    // send msg to a function node which can then use the cb
+                    // to publish response to hermera queue
                     node.send(msg)
                 })
         })
