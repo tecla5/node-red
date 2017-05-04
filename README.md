@@ -25,24 +25,33 @@ More documentation can be found [here](http://nodered.org/docs).
 For further help, or general discussion, please use the
 [mailing list](https://groups.google.com/forum/#!forum/node-red).
 
-## Changes
+## SenecaJS or Hemera services
 
-Adding service nodes:
-- `pattern-match` to pattern match on NATS messages
+Added subscribe match node `sub-match`
+Can be used to pattern match on SenecaJS based messages.
 
-Hermera will act on a message by sending it to the next node(s) with a `cb` and `resp`.
-You should link a `pattern-match` node to a `function` node which uses the cb to publish the result back to NATS.
+The `red/runtime/settings` includes configuration functions:
+- `seneca`
+- `hemera`
+- `nats`
+
+A `sub-match` node will act on a message by sending it to the next node(s) with `$cb` and `$payload`.
+The node should be linked to a `function` node. When the service completes, the `$cb` and `$payload` should be used to publish the service result on the message queue for other services to act on the result.
 
 ## Developers
 
 If you want to run the latest code from git, here's how to get started:
 
-Start Aither or NATS
+### For using NATS
+
+Start Aither (or NATS directly)
 
 ```
 git clone https://github.com/hemerajs/aither.git
 docker-compose up
 ```
+
+### Clone and run
 
 1. Clone the code:
 
@@ -63,6 +72,10 @@ docker-compose up
    or
 
         node red.js
+
+## Quick reload
+
+`npm run build && npm start`
 
 ## Contributing
 

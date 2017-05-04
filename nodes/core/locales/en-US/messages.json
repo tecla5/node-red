@@ -163,9 +163,12 @@
         "tip": "See the Info tab for help writing functions."
     },
     "service": {
+        "framework": {},
         "label": {
-            "pattern": "Service",
-            "maxMessages": "Max messages",
+            "pattern": "Pattern",
+            "validators": "Validators",
+            "framework": "Framework",
+            "maxMessages": "Max msgs.",
             "outputs": "Outputs"
         },
         "error": {

@@ -16,14 +16,17 @@
 
 <!-- First, the content of the edit dialog is defined.                       -->
 
-<script type="text/x-red" data-template-name="pattern-match">
-    <!-- data-template-name identifies the node type this is for              -->
+<script type="text/x-red" data-template-name="sub-match">
+    <div class="form-row">
+        <label for="node-input-framework"><i class="fa fa-cog"></i> <span data-i18n="service.label.framework"></span></label>
+        <!--  class="selectpicker" bootstrap -->
+        <select id="node-input-framework">
+            <option value="hemera">Hemera</option>
+            <option value="seneca">Seneca</option>
+        </select>
+    </div>
 
-    <!-- Each of the following divs creates a field in the edit dialog.       -->
-    <!-- Generally, there should be an input for each property of the node.   -->
-    <!-- The for and id attributes identify the corresponding property        -->
-    <!-- (with the 'node-input-' prefix).                                     -->
-    <!-- The available icon classes are defined Font Awesome Icons (FA Icons) -->
+    <br/>
     <div class="form-row">
         <label for="node-input-topic"><i class="fa fa-tasks"></i> <span data-i18n="common.label.topic"></span></label>
         <input type="text" id="node-input-topic" placeholder="Topic">
@@ -31,8 +34,14 @@
 
     <br/>
     <div class="form-row">
-        <label for="node-input-topic"><i class="fa fa-search"></i> <span data-i18n="service.label.pattern"></span></label>
-        <input type="text" id="node-input-topic" placeholder="{}">
+        <label for="node-input-pattern"><i class="fa fa-search"></i> <span data-i18n="service.label.pattern"></span></label>
+        <textarea id="node-input-pattern" placeholder="{}"></textarea>
+    </div>
+
+    <br/>
+    <div class="form-row">
+        <label for="node-input-validators"><i class="fa fa-check"></i> <span data-i18n="service.label.validators"></span></label>
+        <textarea id="node-input-validators" placeholder="{}"></textarea>
     </div>
 
     <br/>
@@ -42,9 +51,6 @@
     </div>
 
     <br/>
-
-    <!-- By convention, most nodes have a 'name' property. The following div -->
-    <!-- provides the necessary field. Should always be the last option      -->
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="common.label.name"></span></label>
         <input type="text" id="node-input-name" data-i18n="[placeholder]common.label.name">
@@ -53,7 +59,7 @@
 
 
 <!-- Next, some simple help text is provided for the node.                   -->
-<script type="text/x-red" data-help-name="pattern-match">
+<script type="text/x-red" data-help-name="sub-match">
     <!-- data-help-name identifies the node type this help is for             -->
     <!-- This content appears in the Info sidebar when a node is selected     -->
     <!-- The first <p> is used as the pop-up tool tip when hovering over a    -->
@@ -75,8 +81,9 @@
 <!-- Finally, the node type is registered along with all of its properties   -->
 <!-- The example below shows a small subset of the properties that can be set-->
 <script type="text/javascript">
-    RED.nodes.registerType('pattern-match', {
+    RED.nodes.registerType('sub-match', {
         category: 'input', // the palette category
+        color: 'aqua',
         defaults: { // defines the editable properties of the node
             name: {
                 value: "my-service"

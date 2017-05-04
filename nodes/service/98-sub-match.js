@@ -21,22 +21,6 @@
 
 module.exports = function (RED) {
     "use strict";
-    // require any external libraries we may need....
-    //var foo = require("foo-library");
-    const Hemera = require('nats-hemera')
-    const config = RED.settings.nats || {
-        'url': process.env.NATS_URL,
-        'user': process.env.NATS_USER,
-        'pass': process.env.NATS_PW
-    }
-    console.log('nats config', config)
-    const nats = require('nats').connect(config)
-    const logLevel = RED.settings.logLevel || 'info'
-    const hemera = new Hemera(nats, {
-        logLevel
-    })
-    const joi = require('hemera-joi')
-    hemera.use(joi)
 
     function resolvePattern({
         pattern,
@@ -54,6 +38,7 @@ module.exports = function (RED) {
         this.topic = n.topic;
         this.pattern = n.pattern || {};
         this.pattern.$maxMessages = n.maxMessages
+        this.framework = n.framework || 'hermera';
 
         // copy "this" object in case we need it in context of callbacks of other functions.
         var node = this;
@@ -65,24 +50,28 @@ module.exports = function (RED) {
         var msg = {};
         msg.topic = this.topic;
 
-        hemera.ready(() => {
-            // Use Joi as payload validator
-            hemera.setOption('payloadValidator', 'hemera-joi')
-            let pattern = resolvePattern({
-                pattern: node.pattern,
-                validations: node.validations
-            })
-
-            let Joi = hemera.exposition['hemera-joi'].joi
-            hemera.act(pattern,
-                (req, cb) => {
-                    msg.req = req
-                    msg.cb = cb
-                    // send msg to a function node which can then use the cb
-                    // to publish response to hermera queue
-                    node.send(msg)
-                })
+        let selectedFramework = RED.settings[node.framework]
+        if (!selectedFramework) {
+            node.error(`No settings defined for framework: ${node.framework}`)
+            return
+        }
+        const actor = selectedFramework()
+        // Use Joi as payload validator
+        // https://github.com/senecajs/seneca-joi
+        let pattern = resolvePattern({
+            pattern: node.pattern,
+            validations: node.validations
         })
+        actor.act(pattern,
+            // see http://senecajs.org/getting-started/#patterns
+            (payload, cb) => {
+                msg.$payload = payload
+                msg.$cb = cb
+                // send msg to a function node which can then use the $cb
+                // to publish message to hermera queue
+                node.send(msg)
+            }
+        )
 
         this.on('close', function () {
             // Called when the node is shutdown - eg on redeploy.
@@ -93,6 +82,6 @@ module.exports = function (RED) {
 
     // Register the node by name. This must be called before overriding any of the
     // Node functions.
-    RED.nodes.registerType('pattern-match', PatternMatchNode);
+    RED.nodes.registerType('sub-match', PatternMatchNode);
 
 }
