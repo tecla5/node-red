@@ -169,7 +169,8 @@
             "validators": "Validators",
             "framework": "Framework",
             "maxMessages": "Max msgs.",
-            "outputs": "Outputs"
+            "outputs": "Outputs",
+            "swarmCount": "Swarm #"
         },
         "error": {
             "inputListener": "Cannot add listener to 'input' event within Service"

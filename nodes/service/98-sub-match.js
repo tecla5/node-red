@@ -22,9 +22,11 @@
 module.exports = function (RED) {
     "use strict";
 
+    // TODO: use actor.$validate with validations (see hemera settings)
     function resolvePattern({
         pattern,
-        validations
+        validations,
+        actor
     }) {
         return pattern
     }
@@ -36,9 +38,15 @@ module.exports = function (RED) {
 
         // Store local copies of the node configuration (as defined in the .html)
         this.topic = n.topic;
-        this.pattern = n.pattern || {};
-        this.pattern.$maxMessages = n.maxMessages
-        this.framework = n.framework || 'hermera';
+        this.swarmCount = parseInt(n.swarmCount)
+        this.pattern = JSON.parse(n.pattern) || {};
+        this.validations = JSON.parse(n.validations) || {};
+        this.pattern.topic = this.pattern.topic || this.topic
+        if (n.maxMessages) {
+            this.pattern.$maxMessages = parseInt(n.maxMessages)
+        }
+
+        this.framework = n.framework || 'hemera';
 
         // copy "this" object in case we need it in context of callbacks of other functions.
         var node = this;
@@ -60,7 +68,8 @@ module.exports = function (RED) {
         // https://github.com/senecajs/seneca-joi
         let pattern = resolvePattern({
             pattern: node.pattern,
-            validations: node.validations
+            validations: node.validations,
+            actor
         })
         actor.act(pattern,
             // see http://senecajs.org/getting-started/#patterns
