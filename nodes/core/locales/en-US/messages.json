@@ -162,6 +162,13 @@
         },
         "tip": "See the Info tab for help writing functions."
     },
+    "infra": {
+        "label": {
+            "kibana": "Kibana",
+            "elasticsearch": "Elastic search",
+            "logstash": "Logstash"
+        }
+    },
     "service": {
         "framework": {},
         "label": {
