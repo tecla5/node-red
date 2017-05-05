@@ -14,7 +14,7 @@
  * limitations under the License.
  **/
 
-require('yamljs')
+// const YAML = require('yamljs');
 
 RED.clipboard = (function () {
 
@@ -198,14 +198,15 @@ RED.clipboard = (function () {
         dialogContainer.append($(exportNodesDialog));
         dialogContainer.i18n();
         var format = RED.settings.flowFilePretty ? "export-format-full" : "export-format-mini";
+        var type = 'export-format-json'
+        $('#export-format-type #' + type).addClass('selected');
 
         function toJson(nodes, opts = {}) {
             return JSON.stringify(nodes, null, opts);
         }
 
         function toYaml(nodes) {
-            var json = toJson(nodes)
-            return YAML.stringify(json)
+            return YAML.stringify(nodes)
         }
 
         $("#export-format-type > a").click(function (evt) {
@@ -219,7 +220,8 @@ RED.clipboard = (function () {
             $(this).addClass('selected');
 
             if (flow.length > 0) {
-                var nodes = JSON.parse(flow);
+                var parser = (type === 'export-format-json') ? JSON : YAML
+                var nodes = parser.parse(flow);
 
                 type = $(this).attr('id');
                 if (type === 'export-format-json') {
