@@ -86,6 +86,17 @@ RED.clipboard = (function () {
             </ul>
         </div>`
 
+        var dropDown = `<div class="btn-group">
+        <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">
+            Action
+            <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+            <li><a href="#">JSON</a></li>
+            <li><a href="#">YAML</a></li>
+        </ul>
+        </div>`
+
         exportNodesDialog = `
             <div class="form-row">
                 <label style="width:auto;margin-right: 10px;" data-i18n="clipboard.export.copy"></label>
@@ -96,15 +107,16 @@ RED.clipboard = (function () {
                 </span>
             </div>
             <div class="form-row">
-                <textarea readonly style="resize: none; width: 100%; border-radius: 4px;font-family: monospace; font-size: 12px; background:#f3f3f3; padding-left: 0.5em; box-sizing:border-box;" id="clipboard-export" rows="5"></textarea>
+                <textarea readonly style="resize: none; width: 100%; height: 20em; border-radius: 4px;font-family: monospace; font-size: 12px; background:#f3f3f3; padding-left: 0.5em; box-sizing:border-box;" id="clipboard-export" rows="5"></textarea>
             </div>
-            <div class="form-row" style="text-align: right;">
+            <div class="form-row" style="text-align: right; height: 10em">
+                ${dropDown}
                 <span id="export-format-group" class="button-group">
                     <a id="export-format-mini" class="editor-button editor-button-small toggle" href="#" data-i18n="clipboard.export.compact"></a>
                     <a id="export-format-full" class="editor-button editor-button-small toggle" href="#" data-i18n="clipboard.export.formatted"></a>
-                    ${exportFormat}
                 </span>
-            </div>`
+            </div>
+        `
 
         importNodesDialog = '<div class="form-row">' +
             '<textarea style="resize: none; width: 100%; border-radius: 0px;font-family: monospace; font-size: 12px; background:#eee; padding-left: 0.5em; box-sizing:border-box;" id="clipboard-import" rows="5" placeholder="' +
