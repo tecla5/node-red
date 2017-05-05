@@ -78,18 +78,19 @@ RED.clipboard = (function () {
         dialogContainer = dialog.children(".dialog-form");
 
         exportFormat = `<div class="btn-group">
-            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-            Format <span class="caret"></span></button>
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            Format
+            <span class="caret"></span></button>
             <ul class="dropdown-menu" role="menu">
-            <li><a href="#">JSON</a></li>
-            <li><a href="#">YAML</a></li>
+                <li><a href="#">JSON</a></li>
+                <li><a href="#">YAML</a></li>
             </ul>
         </div>`
 
         exportNodesDialog = `
             <div class="form-row">
                 <label style="width:auto;margin-right: 10px;" data-i18n="clipboard.export.copy"></label>
-                <span id="export-range-group" class="button-group">
+                <span id="export-range-group" class="btn-group">
                     <a id="export-range-selected" class="editor-button toggle" href="#" data-i18n="clipboard.export.selected"></a>
                     <a id="export-range-flow" class="editor-button toggle" href="#" data-i18n="clipboard.export.current"></a>
                     <a id="export-range-full" class="editor-button toggle" href="#" data-i18n="clipboard.export.all"></a>
@@ -99,7 +100,7 @@ RED.clipboard = (function () {
                 <textarea readonly style="resize: none; width: 100%; border-radius: 4px;font-family: monospace; font-size: 12px; background:#f3f3f3; padding-left: 0.5em; box-sizing:border-box;" id="clipboard-export" rows="5"></textarea>
             </div>
             <div class="form-row" style="text-align: right;">
-                <span id="export-format-group" class="button-group">
+                <span id="export-format-group" class="btn-group">
                     <a id="export-format-mini" class="editor-button editor-button-small toggle" href="#" data-i18n="clipboard.export.compact"></a>
                     <a id="export-format-full" class="editor-button editor-button-small toggle" href="#" data-i18n="clipboard.export.formatted"></a>
                     ${exportFormat}
