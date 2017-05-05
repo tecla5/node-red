@@ -210,7 +210,14 @@ RED.clipboard = (function () {
 
         $("#export-format-type > a").click(function (evt) {
             evt.preventDefault();
+            if ($(this).hasClass('disabled') || $(this).hasClass('selected')) {
+                $("#clipboard-export").focus();
+                return;
+            }
             var flow = $("#clipboard-export").val();
+            $(this).parent().children().removeClass('selected');
+            $(this).addClass('selected');
+
             if (flow.length > 0) {
                 var nodes = JSON.parse(flow);
 
@@ -220,6 +227,8 @@ RED.clipboard = (function () {
                 } else {
                     flow = toYaml(nodes);
                 }
+                $("#clipboard-export").val(flow);
+                $("#clipboard-export").focus();
             }
         })
 
