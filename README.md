@@ -25,12 +25,19 @@ More documentation can be found [here](http://nodered.org/docs).
 For further help, or general discussion, please use the
 [mailing list](https://groups.google.com/forum/#!forum/node-red).
 
+## Babel ES6
+
+Now uses `grunt-babel` to compile to ES5.
+The babel grunt step compiles using babel config in `.babelrc`, for now just using basic `preset-2015`
+The compiled files are saved as `.es5.js`
+
 ## SenecaJS or Hemera services
 
 Added subscribe match node `sub-match`
 Can be used to pattern match on SenecaJS based messages.
 
 The `red/runtime/settings` includes configuration functions:
+
 - `seneca`
 - `hemera`
 - `nats`
@@ -53,6 +60,8 @@ docker-compose up
 
 ### Clone and run
 
+To force development mode use `grunt dev` task or explicitly set `export NODE_ENV=development`
+
 1. Clone the code:
 
         git clone https://github.com/node-red/node-red.git
@@ -63,6 +72,12 @@ docker-compose up
         npm install
 
 3. Build the code
+
+Development:
+
+        npm run dev
+
+Production (uglified & minified):
 
         npm run build
 
@@ -75,7 +90,7 @@ docker-compose up
 
 ## Quick reload
 
-`npm run build && npm start`
+`npm run dev && npm start`
 
 ## Contributing
 

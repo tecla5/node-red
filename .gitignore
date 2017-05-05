@@ -7,6 +7,8 @@
 .sessions.json
 .settings
 .tern-project
+*.es6.js
+*.es6.js.map
 *.backup
 *_cred*
 coverage

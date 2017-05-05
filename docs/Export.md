@@ -8,7 +8,20 @@ See `editors/js/nodes.js`
 
     function createExportableNodeSet(set) {
       // ...
+
+      if (node.type != "subflow") {
+          var convertedNode = RED.nodes.convertNode(node);
+
     }
+```
+
+`public/red.js`
+
+```js
+    /**
+     * Converts a node to an exportable JSON Object
+     **/
+    function convertNode(n, exportCreds) {
 ```
 
 To customize use a decorator or one or more filters!

@@ -16,7 +16,7 @@
 
 var path = require("path");
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
     var nodemonArgs = ["-v"];
     var flowFile = grunt.option('flowFile');
@@ -37,13 +37,19 @@ module.exports = function(grunt) {
                 ui: 'bdd',
                 reporter: 'spec'
             },
-            all: { src: ['test/**/*_spec.js'] },
-            core: { src: ["test/_spec.js","test/red/**/*_spec.js"]},
-            nodes: { src: ["test/nodes/**/*_spec.js"]}
+            all: {
+                src: ['test/**/*_spec.js']
+            },
+            core: {
+                src: ["test/_spec.js", "test/red/**/*_spec.js"]
+            },
+            nodes: {
+                src: ["test/nodes/**/*_spec.js"]
+            }
         },
         jshint: {
             options: {
-                jshintrc:true
+                jshintrc: true
                 // http://www.jshint.com/docs/options/
                 //"asi": true,      // allow missing semicolons
                 //"curly": true,    // require braces
@@ -73,12 +79,12 @@ module.exports = function(grunt) {
             },
             nodes: {
                 files: {
-                    src: [ 'nodes/core/*/*.js' ]
+                    src: ['nodes/core/*/*.js']
                 }
             },
             editor: {
                 files: {
-                    src: [ 'editor/js/**/*.js' ]
+                    src: ['editor/js/**/*.js']
                 }
             },
             tests: {
@@ -162,15 +168,34 @@ module.exports = function(grunt) {
                 }
             }
         },
+        babel: {
+            options: {
+                "sourceMap": true
+            },
+            dist: {
+                files: [{
+                    "expand": true,
+                    "src": [
+                        "public/red/red.js",
+                        "public/red/main.js",
+                        "public/vendor/jsonata/jsonata.js",
+                        "editor/vendor/jsonata/mode-jsonata.js",
+                        'editor/vendor/jsonata/worker-jsonata.js',
+                        'editor/vendor/jsonata/snippets-jsonata.js'
+                    ],
+                    "ext": ".es5.js"
+                }]
+            }
+        },
         uglify: {
             build: {
                 files: {
-                    'public/red/red.min.js': 'public/red/red.js',
-                    'public/red/main.min.js': 'public/red/main.js',
-                    'public/vendor/jsonata/jsonata.min.js': 'public/vendor/jsonata/jsonata.js',
-                    'public/vendor/ace/mode-jsonata.js': 'editor/vendor/jsonata/mode-jsonata.js',
-                    'public/vendor/ace/worker-jsonata.js': 'editor/vendor/jsonata/worker-jsonata.js',
-                    'public/vendor/ace/snippets/jsonata.js': 'editor/vendor/jsonata/snippets-jsonata.js'
+                    'public/red/red.min.js': 'public/red/red.es5.js',
+                    'public/red/main.min.js': 'public/red/main.es5.js',
+                    'public/vendor/jsonata/jsonata.min.js': 'public/vendor/jsonata/jsonata.es5.js',
+                    'public/vendor/ace/mode-jsonata.js': 'editor/vendor/jsonata/mode-jsonata.es5.js',
+                    'public/vendor/ace/worker-jsonata.js': 'editor/vendor/jsonata/worker-jsonata.es5.js',
+                    'public/vendor/ace/snippets/jsonata.js': 'editor/vendor/jsonata/snippets-jsonata.es5.js'
                 }
             }
         },
@@ -180,13 +205,14 @@ module.exports = function(grunt) {
                     outputStyle: 'compressed'
                 },
                 files: [{
-                    dest: 'public/red/style.min.css',
-                    src: 'editor/sass/style.scss'
-                },
-                {
-                    dest: 'public/vendor/bootstrap/css/bootstrap.min.css',
-                    src: 'editor/vendor/bootstrap/css/bootstrap.css'
-                }]
+                        dest: 'public/red/style.min.css',
+                        src: 'editor/sass/style.scss'
+                    },
+                    {
+                        dest: 'public/vendor/bootstrap/css/bootstrap.min.css',
+                        src: 'editor/vendor/bootstrap/css/bootstrap.css'
+                    }
+                ]
             }
         },
         jsonlint: {
@@ -237,13 +263,13 @@ module.exports = function(grunt) {
                 files: [
                     'editor/js/**/*.js'
                 ],
-                tasks: ['copy:build','concat','uglify','attachCopyright:js']
+                tasks: ['copy:build', 'concat', 'uglify', 'attachCopyright:js']
             },
             sass: {
                 files: [
                     'editor/sass/**/*.scss'
                 ],
-                tasks: ['sass','attachCopyright:css']
+                tasks: ['sass', 'attachCopyright:css']
             },
             json: {
                 files: [
@@ -257,7 +283,7 @@ module.exports = function(grunt) {
                 files: [
                     'editor/js/keymap.json'
                 ],
-                tasks: ['jsonlint:keymaps','copy:build']
+                tasks: ['jsonlint:keymaps', 'copy:build']
             },
             misc: {
                 files: [
@@ -275,7 +301,7 @@ module.exports = function(grunt) {
                     args: nodemonArgs,
                     ext: 'js,html,json',
                     watch: [
-                        'red','nodes'
+                        'red', 'nodes'
                     ]
                 }
             }
@@ -292,8 +318,7 @@ module.exports = function(grunt) {
 
         copy: {
             build: {
-                files:[
-                    {
+                files: [{
                         src: 'editor/js/main.js',
                         dest: 'public/red/main.js'
                     },
@@ -327,7 +352,7 @@ module.exports = function(grunt) {
                     },
                     {
                         expand: true,
-                        src: ['editor/index.html','editor/favicon.ico'],
+                        src: ['editor/index.html', 'editor/favicon.ico'],
                         dest: 'public/',
                         flatten: true
                     },
@@ -389,6 +414,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-concurrent');
+    grunt.loadNpmTasks('grunt-babel');
     grunt.loadNpmTasks('grunt-sass');
     grunt.loadNpmTasks('grunt-nodemon');
     grunt.loadNpmTasks('grunt-contrib-compress');
@@ -396,40 +422,40 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-chmod');
     grunt.loadNpmTasks('grunt-jsonlint');
 
-    grunt.registerMultiTask('attachCopyright', function() {
+    grunt.registerMultiTask('attachCopyright', function () {
         var files = this.data.src;
-        var copyright = "/**\n"+
-            " * Copyright JS Foundation and other contributors, http://js.foundation\n"+
-            " *\n"+
-            " * Licensed under the Apache License, Version 2.0 (the \"License\");\n"+
-            " * you may not use this file except in compliance with the License.\n"+
-            " * You may obtain a copy of the License at\n"+
-            " *\n"+
-            " * http://www.apache.org/licenses/LICENSE-2.0\n"+
-            " *\n"+
-            " * Unless required by applicable law or agreed to in writing, software\n"+
-            " * distributed under the License is distributed on an \"AS IS\" BASIS,\n"+
-            " * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n"+
-            " * See the License for the specific language governing permissions and\n"+
-            " * limitations under the License.\n"+
+        var copyright = "/**\n" +
+            " * Copyright JS Foundation and other contributors, http://js.foundation\n" +
+            " *\n" +
+            " * Licensed under the Apache License, Version 2.0 (the \"License\");\n" +
+            " * you may not use this file except in compliance with the License.\n" +
+            " * You may obtain a copy of the License at\n" +
+            " *\n" +
+            " * http://www.apache.org/licenses/LICENSE-2.0\n" +
+            " *\n" +
+            " * Unless required by applicable law or agreed to in writing, software\n" +
+            " * distributed under the License is distributed on an \"AS IS\" BASIS,\n" +
+            " * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n" +
+            " * See the License for the specific language governing permissions and\n" +
+            " * limitations under the License.\n" +
             " **/\n";
 
         if (files) {
-            for (var i=0;i<files.length;i++) {
+            for (var i = 0; i < files.length; i++) {
                 var file = files[i];
                 if (!grunt.file.exists(file)) {
-                    grunt.log.warn('File '+ file + ' not found');
+                    grunt.log.warn('File ' + file + ' not found');
                     return false;
                 } else {
                     var content = grunt.file.read(file);
                     if (content.indexOf(copyright) == -1) {
-                        content = copyright+content;
+                        content = copyright + content;
                         if (!grunt.file.write(file, content)) {
                             return false;
                         }
-                        grunt.log.writeln("Attached copyright to "+file);
+                        grunt.log.writeln("Attached copyright to " + file);
                     } else {
-                        grunt.log.writeln("Copyright already on "+file);
+                        grunt.log.writeln("Copyright already on " + file);
                     }
                 }
             }
@@ -438,36 +464,29 @@ module.exports = function(grunt) {
 
     grunt.registerTask('setDevEnv',
         'Sets NODE_ENV=development so non-minified assets are used',
-            function () {
-                process.env.NODE_ENV = 'development';
-            });
+        function () {
+            process.env.NODE_ENV = 'development';
+        });
 
     grunt.registerTask('default',
-        'Builds editor content then runs code style checks and unit tests on all components',
-        ['build','test-core','test-editor','test-nodes']);
+        'Builds editor content then runs code style checks and unit tests on all components', ['build', 'test-core', 'test-editor', 'test-nodes']);
 
     grunt.registerTask('test-core',
-        'Runs code style check and unit tests on core runtime code',
-        ['jshint:core','simplemocha:core']);
+        'Runs code style check and unit tests on core runtime code', ['jshint:core', 'simplemocha:core']);
 
     grunt.registerTask('test-editor',
-        'Runs code style check on editor code',
-        ['jshint:editor']);
+        'Runs code style check on editor code', ['jshint:editor']);
 
     grunt.registerTask('test-nodes',
-        'Runs unit tests on core nodes',
-        ['simplemocha:nodes']);
+        'Runs unit tests on core nodes', ['simplemocha:nodes']);
 
     grunt.registerTask('build',
-        'Builds editor content',
-        ['clean:build','jsonlint','concat:build','concat:vendor','copy:build','uglify:build','sass:build','attachCopyright']);
+        'Builds editor content', ['clean:build', 'jsonlint', 'concat:build', 'concat:vendor', 'copy:build', 'babel', 'uglify:build', 'sass:build', 'attachCopyright']);
 
     grunt.registerTask('dev',
-        'Developer mode: run node-red, watch for source changes and build/restart',
-        ['build','setDevEnv','concurrent:dev']);
+        'Developer mode: run node-red, watch for source changes and build/restart', ['build', 'setDevEnv', 'concurrent:dev']);
 
     grunt.registerTask('release',
-        'Create distribution zip file',
-        ['build','clean:release','copy:release','chmod:release','compress:release']);
+        'Create distribution zip file', ['build', 'clean:release', 'copy:release', 'chmod:release', 'compress:release']);
 
 };
