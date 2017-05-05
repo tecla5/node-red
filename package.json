@@ -19,7 +19,8 @@
     "node-red": "./red.js",
     "node-red-pi": "bin/node-red-pi"
   },
-  "contributors": [{
+  "contributors": [
+    {
       "name": "Nick O'Leary"
     },
     {
@@ -73,7 +74,8 @@
     "uglify-js": "^2.8.22",
     "when": "3.7.7",
     "ws": "1.1.1",
-    "xml2js": "0.4.17"
+    "xml2js": "0.4.17",
+    "yamljs": "^0.2.10"
   },
   "optionalDependencies": {
     "bcrypt": "~1.0.1"

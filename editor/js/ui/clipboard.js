@@ -14,6 +14,7 @@
  * limitations under the License.
  **/
 
+require('yamljs')
 
 RED.clipboard = (function () {
 
@@ -77,23 +78,14 @@ RED.clipboard = (function () {
 
         dialogContainer = dialog.children(".dialog-form");
 
-        exportFormat = `<div class="btn-group">
-            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-            Format <span class="caret"></span></button>
-            <ul class="dropdown-menu" role="menu">
-            <li><a href="#">JSON</a></li>
-            <li><a href="#">YAML</a></li>
-            </ul>
-        </div>`
-
-        var dropDown = `<div class="btn-group">
+        var formatDropDown = `<div class="btn-group">
         <a class="btn btn-mini dropdown-toggle" data-toggle="dropdown" href="#">
-            Action
+            Format
             <span class="caret"></span>
         </a>
-        <ul class="dropdown-menu">
-            <li><a href="#">JSON</a></li>
-            <li><a href="#">YAML</a></li>
+        <ul class="dropdown-menu" style="padding: 0px; min-width: 100px; width: 100px !important; border-radius: 4px; font-size: 11px;">
+            <li><a id="format-json" href="#" style="line-height: 12px; padding: 6px 10px;">JSON</a></li>
+            <li><a id="format-yaml" href="#" style="line-height: 12px; padding: 6px 10px;">YAML</a></li>
         </ul>
         </div>`
 
@@ -106,15 +98,33 @@ RED.clipboard = (function () {
                     <a id="export-range-full" class="editor-button toggle" href="#" data-i18n="clipboard.export.all"></a>
                 </span>
             </div>
-            <div class="form-row">
-                <textarea readonly style="resize: none; width: 100%; height: 20em; border-radius: 4px;font-family: monospace; font-size: 12px; background:#f3f3f3; padding-left: 0.5em; box-sizing:border-box;" id="clipboard-export" rows="5"></textarea>
+            <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab1" data-toggle="tab">Node</a></li>
+                <li><a href="#tab2" data-toggle="tab">Docker config</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab1">
+                    <div class="form-row">
+                        <textarea readonly style="resize: none; width: 100%; height: 20em; border-radius: 4px;font-family: monospace; font-size: 12px; background:#f3f3f3; padding-left: 0.5em; box-sizing:border-box;" id="clipboard-export" rows="5"></textarea>
+                    </div>
+                    <div class="form-row" style="height: 4em">
+                        <span id="export-format-type" class="button-group pull-right">
+                            <a id="export-format-yaml" class="editor-button editor-button-small toggle" href="#" data-i18n="clipboard.export.yaml"></a>
+                            <a id="export-format-json" class="editor-button editor-button-small toggle" href="#" data-i18n="clipboard.export.json"></a>
+                        </span>
+                        <span id="export-format-group" class="button-group">
+                            <a id="export-format-mini" class="editor-button editor-button-small toggle" href="#" data-i18n="clipboard.export.compact"></a>
+                            <a id="export-format-full" class="editor-button editor-button-small toggle" href="#" data-i18n="clipboard.export.formatted"></a>
+                        </span>
+                    </div>
+                </div>
+                <div class="tab-pane" id="tab2">
+                    <div class="form-row">
+                        <textarea readonly style="resize: none; width: 100%; height: 20em; border-radius: 4px;font-family: monospace; font-size: 12px; background:#f3f3f3; padding-left: 0.5em; box-sizing:border-box;" id="clipboard-export-docker" rows="5"></textarea>
+                    </div>
+                </div>
             </div>
-            <div class="form-row" style="text-align: right; height: 10em">
-                ${dropDown}
-                <span id="export-format-group" class="button-group">
-                    <a id="export-format-mini" class="editor-button editor-button-small toggle" href="#" data-i18n="clipboard.export.compact"></a>
-                    <a id="export-format-full" class="editor-button editor-button-small toggle" href="#" data-i18n="clipboard.export.formatted"></a>
-                </span>
             </div>
         `
 
@@ -189,6 +199,30 @@ RED.clipboard = (function () {
         dialogContainer.i18n();
         var format = RED.settings.flowFilePretty ? "export-format-full" : "export-format-mini";
 
+        function toJson(nodes, opts = {}) {
+            return JSON.stringify(nodes, null, opts);
+        }
+
+        function toYaml(nodes) {
+            var json = toJson(nodes)
+            return YAML.stringify(json)
+        }
+
+        $("#export-format-type > a").click(function (evt) {
+            evt.preventDefault();
+            var flow = $("#clipboard-export").val();
+            if (flow.length > 0) {
+                var nodes = JSON.parse(flow);
+
+                type = $(this).attr('id');
+                if (type === 'export-format-json') {
+                    flow = toJson(nodes, 4);
+                } else {
+                    flow = toYaml(nodes);
+                }
+            }
+        })
+
         $("#export-format-group > a").click(function (evt) {
             evt.preventDefault();
             if ($(this).hasClass('disabled') || $(this).hasClass('selected')) {
@@ -204,9 +238,9 @@ RED.clipboard = (function () {
 
                 format = $(this).attr('id');
                 if (format === 'export-format-full') {
-                    flow = JSON.stringify(nodes, null, 4);
+                    flow = toJson(nodes, 4);
                 } else {
-                    flow = JSON.stringify(nodes);
+                    flow = toJson(nodes);
                 }
                 $("#clipboard-export").val(flow);
                 $("#clipboard-export").focus();

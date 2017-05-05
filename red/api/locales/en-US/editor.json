@@ -3,7 +3,7 @@
         "label": {
             "name": "Name",
             "ok": "Ok",
-            "done":"Done",
+            "done": "Done",
             "cancel": "Cancel",
             "delete": "Delete",
             "close": "Close",
@@ -53,7 +53,7 @@
             "keyboardShortcuts": "Keyboard shortcuts",
             "login": "Login",
             "logout": "Logout",
-            "editPalette":"Manage palette",
+            "editPalette": "Manage palette",
             "showTips": "Show tips"
         }
     },
@@ -94,11 +94,13 @@
         "nodeCopied_plural": "__count__ nodes copied",
         "invalidFlow": "Invalid flow: __message__",
         "export": {
-            "selected":"selected nodes",
-            "current":"current flow",
-            "all":"all flows",
-            "compact":"compact",
-            "formatted":"formatted",
+            "selected": "selected nodes",
+            "current": "current flow",
+            "all": "all flows",
+            "compact": "compact",
+            "formatted": "formatted",
+            "yaml": "yaml",
+            "json": "json",
             "copy": "Export to clipboard"
         },
         "import": {
@@ -116,8 +118,8 @@
         "modifiedNodesDesc": "Only deploys nodes that have changed",
         "successfulDeploy": "Successfully deployed",
         "deployFailed": "Deploy failed: __message__",
-        "unusedConfigNodes":"You have some unused configuration nodes.",
-        "unusedConfigNodesLink":"Click here to see them",
+        "unusedConfigNodes": "You have some unused configuration nodes.",
+        "unusedConfigNodesLink": "Click here to see them",
         "errors": {
             "noResponse": "no response from server"
         },
@@ -153,8 +155,8 @@
         },
         "nodeCount": "__count__ node",
         "nodeCount_plural": "__count__ nodes",
-        "local":"Local",
-        "remote":"Remote"
+        "local": "Local",
+        "remote": "Remote"
 
     },
     "subflow": {
@@ -167,7 +169,7 @@
         "output": "outputs:",
         "deleteSubflow": "delete subflow",
         "info": "Description",
-        "format":"markdown format",
+        "format": "markdown format",
         "errors": {
             "noNodesSelected": "<strong>Cannot create subflow</strong>: no nodes selected",
             "multipleInputsToSelection": "<strong>Cannot create subflow</strong>: multiple inputs to selection"
@@ -299,11 +301,11 @@
             },
             "confirm": {
                 "install": {
-                    "body":"Before installing, please read the node's documentation. Some nodes have dependencies that cannot be automatically resolved and can require a restart of Node-RED. ",
+                    "body": "Before installing, please read the node's documentation. Some nodes have dependencies that cannot be automatically resolved and can require a restart of Node-RED. ",
                     "title": "Install nodes"
                 },
                 "remove": {
-                    "body":"Removing the node will uninstall it from Node-RED. The node may continue to use resources until Node-RED is restarted.",
+                    "body": "Removing the node will uninstall it from Node-RED. The node may continue to use resources until Node-RED is restarted.",
                     "title": "Remove nodes"
                 },
                 "button": {
@@ -336,8 +338,8 @@
             "none": "none",
             "subflows": "subflows",
             "flows": "flows",
-            "filterUnused":"unused",
-            "filterAll":"all",
+            "filterUnused": "unused",
+            "filterAll": "all",
             "filtered": "__count__ hidden"
         },
         "palette": {

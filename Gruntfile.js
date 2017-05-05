@@ -483,8 +483,11 @@ module.exports = function (grunt) {
     grunt.registerTask('build',
         'Builds editor content', ['clean:build', 'jsonlint', 'concat:build', 'concat:vendor', 'copy:build', 'babel', 'uglify:build', 'sass:build', 'attachCopyright']);
 
+    grunt.registerTask('build-dev',
+        'Builds editor content', ['clean:build', 'jsonlint', 'concat:build', 'concat:vendor', 'copy:build', 'babel', 'sass:build']);
+
     grunt.registerTask('dev',
-        'Developer mode: run node-red, watch for source changes and build/restart', ['build', 'setDevEnv', 'concurrent:dev']);
+        'Developer mode: run node-red, watch for source changes and build/restart', ['build-dev', 'setDevEnv', 'concurrent:dev']);
 
     grunt.registerTask('release',
         'Create distribution zip file', ['build', 'clean:release', 'copy:release', 'chmod:release', 'compress:release']);
