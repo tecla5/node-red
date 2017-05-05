@@ -150,6 +150,7 @@ module.exports = function (grunt) {
                 files: {
                     "public/vendor/vendor.js": [
                         "editor/vendor/jquery/js/jquery-1.11.3.min.js",
+                        "editor/vendor/bootstrap/js/bootstrap.min.js",
                         "editor/vendor/jquery/js/jquery-ui-1.10.3.custom.min.js",
                         "editor/vendor/jquery/js/jquery.ui.touch-punch.min.js",
                         "editor/vendor/marked/marked.min.js",
@@ -201,9 +202,14 @@ module.exports = function (grunt) {
                     outputStyle: 'compressed'
                 },
                 files: [{
-                    dest: 'public/red/style.min.css',
-                    src: 'editor/sass/style.scss'
-                }]
+                        dest: 'public/red/style.min.css',
+                        src: 'editor/sass/style.scss'
+                    },
+                    {
+                        dest: 'public/vendor/bootstrap/css/bootstrap.min.css',
+                        src: 'editor/vendor/bootstrap/css/bootstrap.css'
+                    }
+                ]
             }
         },
         jsonlint: {
@@ -327,6 +333,7 @@ module.exports = function (grunt) {
                         cwd: 'editor/vendor',
                         src: [
                             'ace/**',
+                            'bootstrap/img/**',
                             'jquery/css/**',
                             'font-awesome/**'
                         ],
