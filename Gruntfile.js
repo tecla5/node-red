@@ -260,11 +260,43 @@ module.exports = function (grunt) {
             }
         },
         watch: {
-            js: {
+            $js: {
                 files: [
                     'editor/js/**/*.js'
                 ],
                 tasks: ['copy:build', 'concat', 'uglify', 'attachCopyright:js']
+            },
+            $sass: {
+                files: [
+                    'editor/sass/**/*.scss'
+                ],
+                tasks: ['sass', 'attachCopyright:css']
+            },
+            $json: {
+                files: [
+                    'nodes/core/locales/en-US/messages.json',
+                    'red/api/locales/en-US/editor.json',
+                    'red/runtime/locales/en-US/runtime.json'
+                ],
+                tasks: ['jsonlint:messages']
+            },
+            $keymaps: {
+                files: [
+                    'editor/js/keymap.json'
+                ],
+                tasks: ['jsonlint:keymaps', 'copy:build']
+            },
+            $misc: {
+                files: [
+                    'CHANGELOG.md'
+                ],
+                tasks: ['copy:build']
+            },
+            js: {
+                files: [
+                    'editor/js/**/*.js'
+                ],
+                tasks: ['copy:build', 'concat', 'babel']
             },
             sass: {
                 files: [
@@ -310,7 +342,13 @@ module.exports = function (grunt) {
 
         concurrent: {
             dev: {
-                tasks: ['nodemon', 'watch'],
+                tasks: ['nodemon', 'watch-dev'],
+                options: {
+                    logConcurrentOutput: true
+                }
+            },
+            prod: {
+                tasks: ['nodemon', 'watch-prod'],
                 options: {
                     logConcurrentOutput: true
                 }
@@ -462,6 +500,9 @@ module.exports = function (grunt) {
             }
         }
     });
+
+    grunt.registerTask('watch-prod', ['watch:$js', 'watch:$sass', 'watch:$json', 'watch:$keymaps', 'watch:$misc'])
+    grunt.registerTask('watch-dev', ['watch:js', 'watch:sass', 'watch:json', 'watch:keymaps', 'watch:misc'])
 
     grunt.registerTask('setDevEnv',
         'Sets NODE_ENV=development so non-minified assets are used',

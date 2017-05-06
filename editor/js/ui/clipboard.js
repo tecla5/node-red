@@ -89,6 +89,27 @@ RED.clipboard = (function () {
         </ul>
         </div>`
 
+        var nodeExportTab = `
+            <div class="form-row">
+                <textarea readonly id="clipboard-export" style="resize: none; width: 100%; height: 20em; border-radius: 4px;font-family: monospace; font-size: 12px; background:#f3f3f3; padding-left: 0.5em; box-sizing:border-box;" rows="5"></textarea>
+            </div>
+            <div class="form-row" style="height: 4em">
+                <span id="export-format-type" class="button-group pull-right">
+                    <a id="export-format-yaml" class="editor-button editor-button-small toggle" href="#" data-i18n="clipboard.export.yaml"></a>
+                    <a id="export-format-json" class="editor-button editor-button-small toggle" href="#" data-i18n="clipboard.export.json"></a>
+                </span>
+                <span id="export-format-group" class="button-group">
+                    <a id="export-format-mini" class="editor-button editor-button-small toggle" href="#" data-i18n="clipboard.export.compact"></a>
+                    <a id="export-format-full" class="editor-button editor-button-small toggle" href="#" data-i18n="clipboard.export.formatted"></a>
+                </span>
+            </div>`
+
+
+        var dockerExportTab = `
+            <div class="form-row">
+                <textarea readonly id="clipboard-export-docker" style="resize: none; width: 100%; height: 20em; border-radius: 4px;font-family: monospace; font-size: 12px; background:#f3f3f3; padding-left: 0.5em; box-sizing:border-box;" rows="5"></textarea>
+            </div>`
+
         exportNodesDialog = `
             <div class="form-row">
                 <label style="width:auto;margin-right: 10px;" data-i18n="clipboard.export.copy"></label>
@@ -105,24 +126,10 @@ RED.clipboard = (function () {
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="tab1">
-                    <div class="form-row">
-                        <textarea readonly style="resize: none; width: 100%; height: 20em; border-radius: 4px;font-family: monospace; font-size: 12px; background:#f3f3f3; padding-left: 0.5em; box-sizing:border-box;" id="clipboard-export" rows="5"></textarea>
-                    </div>
-                    <div class="form-row" style="height: 4em">
-                        <span id="export-format-type" class="button-group pull-right">
-                            <a id="export-format-yaml" class="editor-button editor-button-small toggle" href="#" data-i18n="clipboard.export.yaml"></a>
-                            <a id="export-format-json" class="editor-button editor-button-small toggle" href="#" data-i18n="clipboard.export.json"></a>
-                        </span>
-                        <span id="export-format-group" class="button-group">
-                            <a id="export-format-mini" class="editor-button editor-button-small toggle" href="#" data-i18n="clipboard.export.compact"></a>
-                            <a id="export-format-full" class="editor-button editor-button-small toggle" href="#" data-i18n="clipboard.export.formatted"></a>
-                        </span>
-                    </div>
+                    ${nodeExportTab}
                 </div>
                 <div class="tab-pane" id="tab2">
-                    <div class="form-row">
-                        <textarea readonly style="resize: none; width: 100%; height: 20em; border-radius: 4px;font-family: monospace; font-size: 12px; background:#f3f3f3; padding-left: 0.5em; box-sizing:border-box;" id="clipboard-export-docker" rows="5"></textarea>
-                    </div>
+                    ${dockerExportTab}
                 </div>
             </div>
             </div>
@@ -201,12 +208,12 @@ RED.clipboard = (function () {
         var type = 'export-format-json'
         $('#export-format-type #' + type).addClass('selected');
 
-        function toJson(nodes, opts = {}) {
-            return JSON.stringify(nodes, null, opts);
+        function toJson(value, opts = {}) {
+            return JSON.stringify(value, null, opts);
         }
 
-        function toYaml(nodes) {
-            return YAML.stringify(nodes)
+        function toYaml(value) {
+            return YAML.stringify(value)
         }
 
         $("#export-format-type > a").click(function (evt) {
@@ -299,6 +306,40 @@ RED.clipboard = (function () {
             $("#clipboard-export").focus();
         })
 
+        const registry = {
+            'elk': (node) => {
+                services = ['kibana', 'elasticsearch', 'logstash']
+                var ports = services.map(name => {
+                    var port = node[name]
+                    return [port, port].join(':')
+                })
+                return {
+                    elk: {
+                        image: 'sebp/elk',
+                        ports
+                    }
+                }
+            }
+        }
+
+        function dockerFor(node) {
+            var regFun = registry[node.type]
+            return regFun ? regFun(node) : {}
+        }
+
+        function toDockerYaml(nodes) {
+            var dockerNodes = nodes.map(node => {
+                return dockerFor(node)
+            })
+            return dockerNodes.map(toYaml)
+        }
+
+        function initDockerExport() {
+            console.log('initDockerExport', nodes)
+            var dockerConfig = toDockerYaml(nodes);
+            $("#clipboard-export-docker").val(dockerConfig);
+        }
+
         $("#clipboard-dialog-ok").hide();
         $("#clipboard-dialog-cancel").hide();
         $("#clipboard-dialog-copy").hide();
@@ -310,6 +351,10 @@ RED.clipboard = (function () {
             $("#export-range-selected").addClass('disabled').removeClass('selected');
             $("#export-range-flow").click();
         }
+
+        initDockerExport()
+
+        // initial population of export format textarea
         if (format === "export-format-full") {
             $("#export-format-full").click();
         } else {
