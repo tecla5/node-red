@@ -150,6 +150,7 @@ module.exports = function (grunt) {
                 files: {
                     "public/vendor/vendor.js": [
                         "editor/vendor/yaml/yamljs.min.js",
+                        "editor/vendor/util/string.min.js",
                         "editor/vendor/jquery/js/jquery-1.11.3.min.js",
                         "editor/vendor/bootstrap/js/bootstrap.min.js",
                         "editor/vendor/jquery/js/jquery-ui-1.10.3.custom.min.js",

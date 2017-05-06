@@ -107,7 +107,7 @@ var persistentSettings = {
         if (this._nats) {
             return this._nats
         }
-        const natsConfig = RED.settings.nats || config.nats || {
+        const natsConfig = config.nats || {
             'url': process.env.NATS_URL,
             'user': process.env.NATS_USER,
             'pass': process.env.NATS_PW

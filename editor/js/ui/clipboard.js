@@ -31,8 +31,8 @@ RED.clipboard = (function () {
             .dialog({
                 modal: true,
                 autoOpen: false,
-                width: 500,
-                resizable: false,
+                width: 600, // SET WIDTH
+                resizable: true,
                 buttons: [{
                         id: "clipboard-dialog-cancel",
                         text: RED._("common.label.cancel"),
@@ -307,8 +307,34 @@ RED.clipboard = (function () {
         })
 
         const registry = {
+            'sub-match': (node) => {
+                var nats = {}
+                if (RED.settings) {
+                    RED.settings.nats ? RED.settings.nats() : {}
+                }
+                var environment = {
+                    NATS_URL: nats.url || 'nats://nats:4222',
+                    NATS_USER: nats.user || 'ruser',
+                    NATS_PW: nats.pass || 'T0pS3cr3t',
+                    HEMERA_LOG_LEVEL: 'silent'
+                }
+                var serviceName = S(node.name).dasherize().s
+
+                var service = {
+                    build: {
+                        context: `./${serviceName}`
+                    },
+                    links: ['nats'],
+                    depends_on: ['nats'],
+                    restart: 'always',
+                    environment
+                }
+                var dockerService = {}
+                dockerService[serviceName] = service
+                return dockerService
+            },
             'elk': (node) => {
-                services = ['kibana', 'elasticsearch', 'logstash']
+                var services = ['kibana', 'elasticsearch', 'logstash']
                 var ports = services.map(name => {
                     var port = node[name]
                     return [port, port].join(':')
@@ -329,12 +355,15 @@ RED.clipboard = (function () {
 
         function toDockerYaml(nodes) {
             var dockerNodes = nodes.map(node => {
-                return dockerFor(node)
+                let dockerNode = dockerFor(node)
+                console.log(dockerNode)
+                return dockerNode
             })
+            console.log(dockerNodes)
             return dockerNodes.map(toYaml)
         }
 
-        function initDockerExport() {
+        function initDockerExport(nodes) {
             console.log('initDockerExport', nodes)
             var dockerConfig = toDockerYaml(nodes);
             $("#clipboard-export-docker").val(dockerConfig);
@@ -352,7 +381,7 @@ RED.clipboard = (function () {
             $("#export-range-flow").click();
         }
 
-        initDockerExport()
+        initDockerExport(selection.nodes)
 
         // initial population of export format textarea
         if (format === "export-format-full") {
