@@ -31,6 +31,20 @@ Now uses `grunt-babel` to compile to ES5.
 The babel grunt step compiles using babel config in `.babelrc`, for now just using basic `preset-2015`
 The compiled files are saved as `.es5.js`
 
+## Adding libs
+
+Currently it should be able to use ES5 modules, as it compiles via Babel.
+You can also manually add libs, either by adding files to `editor/vendor` and then adding to grunt task:
+
+```
+vendor: {
+files: {
+  "public/vendor/vendor.js": [
+    "node_modules/yaml/yamljs.min.js",
+    ...
+```
+
+
 ## SenecaJS or Hemera services
 
 Added subscribe match node `sub-match`
