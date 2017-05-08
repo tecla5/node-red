@@ -1,0 +1,94 @@
+<!--
+  Copyright Tecla5 and other contributors, http://tecla5.com
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<!-- First, the content of the edit dialog is defined.                       -->
+
+<script type="text/x-red" data-template-name="nats-config">
+    <div class="form-row">
+        <label for="node-input-config-host"><i class="fa fa-cog"></i> <span data-i18n="common.label.host"></span></label>
+        <input type="text" id="node-input-config-host" placeholder="localhost">
+    </div>
+
+    <br/>
+    <div class="form-row">
+        <label for="node-input-config-port"><i class="fa fa-cog"></i> <span data-i18n="common.label.port"></span></label>
+        <input type="text" id="node-input-config-port" placeholder="4222">
+    </div>
+
+    <br/>
+    <div class="form-row">
+        <label for="node-input-config-user"><i class="fa fa-cog"></i> <span data-i18n="common.label.user"></span></label>
+        <input type="text" id="node-input-config-user" placeholder="nats">
+    </div>
+
+    <br/>
+    <div class="form-row">
+        <label for="node-input-config-password"><i class="fa fa-cog"></i> <span data-i18n="common.label.password"></span></label>
+        <input type="text" id="node-input-config-password" placeholder="nats">
+    </div>
+
+    <br/>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="common.label.name"></span></label>
+        <input type="text" id="node-input-name" data-i18n="[placeholder]common.label.name">
+    </div>
+</script>
+
+
+<!-- Next, some simple help text is provided for the node.                   -->
+<script type="text/x-red" data-help-name="elk">
+    <p>The NATS config be used as a shared configuration for NATS pub/sub nodes</p>
+</script>
+
+<!-- Finally, the node type is registered along with all of its properties   -->
+<!-- The example below shows a small subset of the properties that can be set-->
+<script type="text/javascript">
+    RED.nodes.registerType('elk', {
+        category: 'config', // the palette category
+        color: '#6644ff',
+        defaults: { // defines the editable properties of the node
+            name: {
+                value: "nats-dev"
+            }, //  along with default values.
+            host: {
+                value: "localhost",
+                required: true
+            },
+            port: {
+                value: "4222",
+                required: true
+            },
+            user: {
+                value: "nats",
+                required: true
+            },
+            password: {
+                value: "nats",
+                required: true
+            },
+        },
+        inputs: 0, // set the number of inputs - only 0 or 1
+        outputs: 0, // set the number of outputs - 0 to n
+        // set the icon (held in icons dir below where you save the node)
+        icon: "cog.png", // saved in  icons/myicon.png
+        label: function () { // sets the default label contents
+            return this.name || this.topic || "sample";
+        },
+        labelStyle: function () { // sets the class to apply to the label
+            return this.name ? "node_label_italic" : "";
+        }
+    })
+</script>

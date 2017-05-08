@@ -44,6 +44,20 @@ files: {
     ...
 ```
 
+## Configuration nodes
+
+See docs for [config-nodes](https://nodered.org/docs/creating-nodes/config-nodes)
+
+Configuration nodes are scoped globally by default, this means the state will be shared between flows.
+
+- its category property is set to `config`
+- the edit template `<input>` elements have ids of `node-config-input-<propertyname>`
+
+The `nats-config` node is an example of a config node. It can be configured via the menu item `Configuration nodes`
+
+Nodes register their use of config nodes by adding a property to the defaults array with the type attribute set to the type of the config node.
+
+A `sub-match` node can set its `nats-config` property to the name of an instance of a `nats-config` config node in scope.
 
 ## SenecaJS or Hemera services
 
