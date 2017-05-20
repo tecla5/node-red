@@ -8,7 +8,10 @@ module.exports = {
   },
   header: {
     title: title,
-    image: 'red/images/node-red.png'
+    image: 'red/images/node-red.png',
+    action: {
+      title: 'login'
+    }
   },
   asset: {
     red: (process.env.NODE_ENV == 'development') ? 'red/red.es5.js' : 'red/red.min.js',
