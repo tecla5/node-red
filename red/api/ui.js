@@ -25,54 +25,75 @@ var icon_paths = [path.resolve(__dirname + '/../../public/icons')];
 var iconCache = {};
 //TODO: create a default icon
 var defaultIcon = path.resolve(__dirname + '/../../public/icons/arrow-in.png');
-var templateDir = path.resolve(__dirname+"/../../editor/templates");
+var templateDir = path.resolve(__dirname + "/../../editor/templates");
 var editorTemplate;
 
 function nodeIconDir(dir) {
     icon_paths.push(path.resolve(dir));
 }
 
+function _loadSharedPartials() {
+    var partials = {};
+    let rootDir = './editor/templates'
+    var files = fs.readdirSync(rootDir);
+    for (var i = 0, l = files.length; i < l; i++) {
+        var file = files[i];
+
+        if (file.match(/\.mst$/)) {
+            // console.log('match', file)
+            var name = path.basename(file, '.mst');
+            // console.log('name', name)
+            let filePath = path.resolve(rootDir, file)
+            partials[name] = fs.readFileSync(filePath, 'utf8');
+        }
+    }
+
+    return partials;
+}
+
 module.exports = {
-    init: function(runtime) {
-        editorTemplate = fs.readFileSync(path.join(templateDir,"index.mst"),"utf8");
+    init: function (runtime) {
+        editorTemplate = fs.readFileSync(path.join(templateDir, "index.mst"), "utf8");
         Mustache.parse(editorTemplate);
         // TODO: this allows init to be called multiple times without
         //       registering multiple instances of the listener.
         //       It isn't.... ideal.
-        runtime.events.removeListener("node-icon-dir",nodeIconDir);
-        runtime.events.on("node-icon-dir",nodeIconDir);
+        runtime.events.removeListener("node-icon-dir", nodeIconDir);
+        runtime.events.on("node-icon-dir", nodeIconDir);
     },
 
-    ensureSlash: function(req,res,next) {
+    ensureSlash: function (req, res, next) {
         var parts = req.originalUrl.split("?");
         if (parts[0].slice(-1) != "/") {
             parts[0] += "/";
             var redirect = parts.join("?");
-            res.redirect(301,redirect);
+            res.redirect(301, redirect);
         } else {
             next();
         }
     },
-    icon: function(req,res) {
+    icon: function (req, res) {
         if (iconCache[req.params.icon]) {
             res.sendFile(iconCache[req.params.icon]); // if not found, express prints this to the console and serves 404
         } else {
-            for (var p=0;p<icon_paths.length;p++) {
-                var iconPath = path.join(icon_paths[p],req.params.icon);
+            for (var p = 0; p < icon_paths.length; p++) {
+                var iconPath = path.join(icon_paths[p], req.params.icon);
                 try {
                     fs.statSync(iconPath);
                     res.sendFile(iconPath);
                     iconCache[req.params.icon] = iconPath;
                     return;
-                } catch(err) {
+                } catch (err) {
                     // iconPath doesn't exist
                 }
             }
             res.sendFile(defaultIcon);
         }
     },
-    editor: function(req,res) {
-        res.send(Mustache.render(editorTemplate,theme.context()));
+    editor: function (req, res) {
+        let partials = _loadSharedPartials()
+        let html = Mustache.render(editorTemplate, theme.context(), partials)
+        res.send(html);
     },
     editorResources: express.static(__dirname + '/../../public')
 };
