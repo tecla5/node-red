@@ -35,16 +35,15 @@ function nodeIconDir(dir) {
 function _loadSharedPartials() {
     var partials = {};
     let rootDir = './editor/templates'
-    var files = fs.readdirSync(rootDir);
+    var recursiveReadSync = require('recursive-readdir-sync')
+    var files = recursiveReadSync(rootDir)
     for (var i = 0, l = files.length; i < l; i++) {
         var file = files[i];
 
         if (file.match(/\.mst$/)) {
-            // console.log('match', file)
             var name = path.basename(file, '.mst');
-            // console.log('name', name)
-            let filePath = path.resolve(rootDir, file)
-            partials[name] = fs.readFileSync(filePath, 'utf8');
+            let contents = fs.readFileSync(file, 'utf8');
+            partials[name] = contents
         }
     }
 
@@ -92,6 +91,9 @@ module.exports = {
     },
     editor: function (req, res) {
         let partials = _loadSharedPartials()
+        // console.log({
+        //     partials: Object.keys(partials)
+        // })
         let html = Mustache.render(editorTemplate, theme.context(), partials)
         res.send(html);
     },
